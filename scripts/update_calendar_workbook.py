@@ -11,10 +11,10 @@ import sys
 from openpyxl import load_workbook
 
 PROJECT = Path(__file__).resolve().parent
-SOURCE_XLSX = Path.home() / 'Downloads' / '2027寒假开学时间_学员人数加权分析系统_字段顺序修正版.xlsx'
+ROOT = Path(os.environ.get('DASHBOARD_REPO_DIR', PROJECT.parents[0]))
+SOURCE_XLSX = Path(os.environ.get('SOURCE_XLSX', ROOT / 'data' / 'holiday_student_analysis.xlsx'))
 CANDIDATES = PROJECT / 'official_calendar_cache' / 'candidates.json'
 BUILDER = PROJECT / 'create_holiday_dashboard.py'
-ROOT = Path(r'D:\龙虾\SXZX-FJKXSJ')
 GITHUB_PAGES_URL = 'https://yxq870504-lgtm.github.io/SXZX-FJKXSJ/'
 GRADE_ORDER = ['初一', '初二', '初三', '高一', '高二', '高三']
 
@@ -27,9 +27,17 @@ def norm_province(v):
 
 
 def run_git(args, check=True):
-    proc = subprocess.run(['git', '-C', str(ROOT), *args], capture_output=True, text=True, encoding='utf-8', errors='replace', check=False)
+    proc = subprocess.run(
+        ['git', '-C', str(ROOT), *args],
+        capture_output=True,
+        text=True,
+        encoding='utf-8',
+        errors='replace',
+        check=False,
+    )
     if check and proc.returncode != 0:
-        raise RuntimeError((proc.stderr or proc.stdout or '').strip())
+        detail = (proc.stderr or proc.stdout or '').strip()
+        raise RuntimeError(f"git {' '.join(args)} 失败：{detail}")
     return proc
 
 
@@ -38,11 +46,10 @@ def publish_to_github(summary: str):
         return {'git': 'skipped', 'message': f'{ROOT} 不是 Git 仓库'}
     run_git(['config', 'user.name', 'github-actions[bot]'], check=False)
     run_git(['config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=False)
-    run_git(['pull', '--rebase'], check=False)
     run_git(['add', 'index.html', 'data/holiday_student_analysis.xlsx'])
     status = run_git(['status', '--porcelain'])
     if not status.stdout.strip():
-        return {'git': 'unchanged', 'message': 'index.html 无变化，无需推送'}
+        return {'git': 'unchanged', 'message': 'index.html 和底表无变化，无需推送'}
     msg = f'daily official calendar refresh {datetime.now():%Y-%m-%d %H:%M:%S} {summary}'
     run_git(['commit', '-m', msg])
     run_git(['push'])
@@ -59,8 +66,11 @@ def ensure_sheets(wb):
 
 
 def main():
+    if not SOURCE_XLSX.exists():
+        raise FileNotFoundError(f'未找到 Excel 底表：{SOURCE_XLSX}')
     if not CANDIDATES.exists():
         raise FileNotFoundError(f'未找到候选文件：{CANDIDATES}')
+
     data = json.loads(CANDIDATES.read_text(encoding='utf-8'))
     candidates = data.get('candidates', [])
     best = {}
@@ -105,17 +115,16 @@ def main():
             wb['官方校历命中明细'].append([now, c.get('province'), h or '', sp or '', c.get('confidence'), c.get('source_url'), '已自动更新'])
 
     keep_estimated = len(province_to_row) - updated
+    wb['官方校历刷新日志'].append([now, len(candidates), updated, keep_estimated, 'pending', '准备生成看板并同步 GitHub'])
+
     backup_dir = PROJECT / 'backups'
     backup_dir.mkdir(parents=True, exist_ok=True)
     backup = backup_dir / f'{SOURCE_XLSX.stem}_official_refresh_{datetime.now():%Y%m%d_%H%M%S}.xlsx'
     shutil.copy2(SOURCE_XLSX, backup)
     wb.save(SOURCE_XLSX)
+
     subprocess.run([sys.executable, str(BUILDER)], cwd=str(PROJECT), check=True)
     publish = publish_to_github(f'updated={updated} candidates={len(candidates)}')
-    wb = load_workbook(SOURCE_XLSX)
-    ensure_sheets(wb)
-    wb['官方校历刷新日志'].append([now, len(candidates), updated, keep_estimated, publish.get('git'), publish.get('message')])
-    wb.save(SOURCE_XLSX)
     print(json.dumps({'ok': True, 'candidates': len(candidates), 'updated': updated, 'keep_estimated': keep_estimated, 'publish': publish, 'backup': str(backup)}, ensure_ascii=False))
 
 
