@@ -1,0 +1,9 @@
+# 本地运行/备份文件不发布到 GitHub Pages
+backups/
+uploads/
+*.xlsx
+*.xls
+*.csv
+*.bak
+*.tmp
+start_dashboard_server.bat
