@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import os
 import shutil
@@ -17,6 +17,7 @@ CANDIDATES = PROJECT / 'official_calendar_cache' / 'candidates.json'
 BUILDER = PROJECT / 'create_holiday_dashboard.py'
 GITHUB_PAGES_URL = 'https://yxq870504-lgtm.github.io/SXZX-FJKXSJ/'
 GRADE_ORDER = ['初一', '初二', '初三', '高一', '高二', '高三']
+HIGH3_OPENING_OFFSET_DAYS = 7
 
 
 def norm_province(v):
@@ -25,6 +26,25 @@ def norm_province(v):
         s = s.replace(suf, '')
     return s
 
+
+
+
+def parse_iso_date(v):
+    if not v:
+        return None
+    if isinstance(v, datetime):
+        return v
+    try:
+        return datetime.strptime(str(v)[:10], '%Y-%m-%d')
+    except Exception:
+        return None
+
+
+def high3_default_spring_date(spring_date):
+    dt = parse_iso_date(spring_date)
+    if not dt:
+        return spring_date
+    return (dt - timedelta(days=HIGH3_OPENING_OFFSET_DAYS)).strftime('%Y-%m-%d')
 
 def run_git(args, check=True):
     proc = subprocess.run(
@@ -102,14 +122,16 @@ def main():
         changed = False
         for gi, g in enumerate(GRADE_ORDER):
             base_col = 3 + gi * 5
+            grade_changed = False
             if h:
                 ws.cell(row, base_col).value = h
-                changed = True
+                grade_changed = True
             if sp:
-                ws.cell(row, base_col + 1).value = sp
-                changed = True
-            if changed:
+                ws.cell(row, base_col + 1).value = high3_default_spring_date(sp) if g == '高三' else sp
+                grade_changed = True
+            if grade_changed:
                 ws.cell(row, base_col + 2).value = '是'
+                changed = True
         if changed:
             updated += 1
             wb['官方校历命中明细'].append([now, c.get('province'), h or '', sp or '', c.get('confidence'), c.get('source_url'), '已自动更新'])

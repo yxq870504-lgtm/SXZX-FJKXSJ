@@ -39,28 +39,34 @@ def strip_html(html: str) -> str:
     return text
 
 
-def search_bing(query: str, limit: int = 5):
+def search_bing(query: str, limit: int = 8):
     url = 'https://www.bing.com/search?q=' + urllib.parse.quote(query)
     try:
         html = http_get(url)
     except Exception:
         return []
     links = []
-    for m in re.finditer(r'<a\s+href="(https?://[^"]+)"', html, flags=re.I):
-        href = m.group(1)
-        if 'bing.com' in href or 'microsoft.com' in href:
-            continue
-        if href not in links:
-            links.append(href)
-        if len(links) >= limit:
-            break
+    patterns = [
+        r'<a\s+href="(https?://[^"]+)"',
+        r'<h2>\s*<a\s+href="(https?://[^"]+)"',
+    ]
+    for pat in patterns:
+        for m in re.finditer(pat, html, flags=re.I):
+            href = m.group(1)
+            href = href.replace('&amp;', '&')
+            if 'bing.com' in href or 'microsoft.com' in href:
+                continue
+            if href not in links:
+                links.append(href)
+            if len(links) >= limit:
+                return links
     return links
 
 
 def parse_candidate(province: str, url: str, text: str):
-    if '2027' not in text and '2026-2027' not in text and '2026—2027' not in text:
+    if '2027' not in text and '2026-2027' not in text and '2026—2027' not in text and '2026－2027' not in text:
         return None
-    if not any(k in text for k in ['寒假', '开学', '校历', '放假']):
+    if not any(k in text for k in ['寒假', '开学', '校历', '放假', '教学日历', '学年安排']):
         return None
 
     windows = []
@@ -87,10 +93,13 @@ def parse_candidate(province: str, url: str, text: str):
         return None
 
     confidence = 0.65
+    netloc = urllib.parse.urlparse(url).netloc
     if '.gov.cn' in url:
         confidence += 0.2
-    if '教育' in text[:5000] or '教委' in text[:5000]:
+    if any(k in text[:5000] for k in ['教育', '教委', '教育局', '教育厅', '学校', '中学']):
         confidence += 0.05
+    if any(k in netloc for k in ['edu', 'jy', 'jyt', 'jw']):
+        confidence += 0.04
     if holiday and spring:
         confidence += 0.1
     confidence = min(confidence, 0.98)
@@ -112,17 +121,37 @@ def main():
     for item in cfg['provinces']:
         province = item['province']
         domains = item.get('domains', [])
+        short = item.get('short') or province
+        city_keywords = item.get('cities', [])
         queries = []
-        for domain in domains[:2]:
-            queries.append(f"site:{domain} {province} 2026-2027 校历 寒假 开学")
-            queries.append(f"site:{domain} {province} 2027 寒假 开学时间")
+        for domain in domains:
+            queries.extend([
+                f"site:{domain} {province} 2026-2027学年度 校历 寒假 开学",
+                f"site:{domain} {short} 2027 寒假 开学时间 中小学",
+                f"site:{domain} {short} 2026-2027学年 普通高中 义务教育 寒假",
+            ])
+        for city in city_keywords:
+            queries.extend([
+                f"{city} 2026-2027学年度 中小学 校历 寒假 开学 官方",
+                f"site:gov.cn {city} 2027 寒假 开学 中小学",
+                f"site:edu.cn {city} 2026-2027 校历 寒假 开学",
+            ])
+        queries.extend([
+            f"{province} 2026-2027学年度 中小学 校历 寒假 开学 官方",
+            f"{short} 2027 寒假 开学时间 普通高中 义务教育 官方",
+            f"{short} 市教育局 2026-2027 校历 寒假 开学",
+            f"{short} 学校 2026-2027 校历 寒假 开学",
+        ])
         seen_urls = set()
-        for q in queries[:4]:
-            for url in search_bing(q, limit=4):
+        for q in queries[:14]:
+            for url in search_bing(q, limit=8):
                 if url in seen_urls:
                     continue
                 seen_urls.add(url)
-                if domains and not any(d in urllib.parse.urlparse(url).netloc for d in domains):
+                netloc = urllib.parse.urlparse(url).netloc
+                allowed = any(d in netloc for d in domains)
+                official_like = any(x in netloc for x in ['.gov.cn', '.edu.cn', 'edu.', 'jy.', 'jyt.', 'jw.'])
+                if not (allowed or official_like):
                     continue
                 try:
                     html = http_get(url)

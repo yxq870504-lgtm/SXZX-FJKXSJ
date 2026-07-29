@@ -7,36 +7,397 @@
     "普通高中 义务教育 2027 寒假 开学"
   ],
   "provinces": [
-    {"province":"北京市", "short":"北京", "domains":["jw.beijing.gov.cn", "beijing.gov.cn"]},
-    {"province":"天津市", "short":"天津", "domains":["jy.tj.gov.cn", "tj.gov.cn"]},
-    {"province":"河北省", "short":"河北", "domains":["jyt.hebei.gov.cn", "hebei.gov.cn"]},
-    {"province":"山西省", "short":"山西", "domains":["jyt.shanxi.gov.cn", "shanxi.gov.cn"]},
-    {"province":"内蒙古自治区", "short":"内蒙古", "domains":["jyt.nmg.gov.cn", "nmg.gov.cn"]},
-    {"province":"辽宁省", "short":"辽宁", "domains":["jyt.ln.gov.cn", "ln.gov.cn"]},
-    {"province":"吉林省", "short":"吉林", "domains":["jyt.jl.gov.cn", "jl.gov.cn"]},
-    {"province":"黑龙江省", "short":"黑龙江", "domains":["jyt.hlj.gov.cn", "hlj.gov.cn"]},
-    {"province":"上海市", "short":"上海", "domains":["edu.sh.gov.cn", "shanghai.gov.cn"]},
-    {"province":"江苏省", "short":"江苏", "domains":["jyt.jiangsu.gov.cn", "jiangsu.gov.cn"]},
-    {"province":"浙江省", "short":"浙江", "domains":["jyt.zj.gov.cn", "zj.gov.cn"]},
-    {"province":"安徽省", "short":"安徽", "domains":["jyt.ah.gov.cn", "ah.gov.cn"]},
-    {"province":"福建省", "short":"福建", "domains":["jyt.fujian.gov.cn", "fujian.gov.cn"]},
-    {"province":"江西省", "short":"江西", "domains":["jyt.jiangxi.gov.cn", "jiangxi.gov.cn"]},
-    {"province":"山东省", "short":"山东", "domains":["edu.shandong.gov.cn", "shandong.gov.cn"]},
-    {"province":"河南省", "short":"河南", "domains":["jyt.henan.gov.cn", "henan.gov.cn"]},
-    {"province":"湖北省", "short":"湖北", "domains":["jyt.hubei.gov.cn", "hubei.gov.cn"]},
-    {"province":"湖南省", "short":"湖南", "domains":["jyt.hunan.gov.cn", "hunan.gov.cn"]},
-    {"province":"广东省", "short":"广东", "domains":["edu.gd.gov.cn", "gd.gov.cn"]},
-    {"province":"广西壮族自治区", "short":"广西", "domains":["jyt.gxzf.gov.cn", "gxzf.gov.cn"]},
-    {"province":"海南省", "short":"海南", "domains":["edu.hainan.gov.cn", "hainan.gov.cn"]},
-    {"province":"重庆市", "short":"重庆", "domains":["jw.cq.gov.cn", "cq.gov.cn"]},
-    {"province":"四川省", "short":"四川", "domains":["edu.sc.gov.cn", "sc.gov.cn"]},
-    {"province":"贵州省", "short":"贵州", "domains":["jyt.guizhou.gov.cn", "guizhou.gov.cn"]},
-    {"province":"云南省", "short":"云南", "domains":["jyt.yn.gov.cn", "yn.gov.cn"]},
-    {"province":"西藏自治区", "short":"西藏", "domains":["edu.xizang.gov.cn", "xizang.gov.cn"]},
-    {"province":"陕西省", "short":"陕西", "domains":["jyt.shaanxi.gov.cn", "shaanxi.gov.cn"]},
-    {"province":"甘肃省", "short":"甘肃", "domains":["jyt.gansu.gov.cn", "gansu.gov.cn"]},
-    {"province":"青海省", "short":"青海", "domains":["jyt.qinghai.gov.cn", "qinghai.gov.cn"]},
-    {"province":"宁夏回族自治区", "short":"宁夏", "domains":["jyt.nx.gov.cn", "nx.gov.cn"]},
-    {"province":"新疆维吾尔自治区", "short":"新疆", "domains":["jyt.xinjiang.gov.cn", "xinjiang.gov.cn"]}
+    {
+      "province": "北京市",
+      "short": "北京",
+      "domains": [
+        "jw.beijing.gov.cn",
+        "beijing.gov.cn"
+      ],
+      "cities": [
+        "北京"
+      ]
+    },
+    {
+      "province": "天津市",
+      "short": "天津",
+      "domains": [
+        "jy.tj.gov.cn",
+        "tj.gov.cn"
+      ],
+      "cities": [
+        "天津"
+      ]
+    },
+    {
+      "province": "河北省",
+      "short": "河北",
+      "domains": [
+        "jyt.hebei.gov.cn",
+        "hebei.gov.cn"
+      ],
+      "cities": [
+        "石家庄",
+        "唐山",
+        "保定"
+      ]
+    },
+    {
+      "province": "山西省",
+      "short": "山西",
+      "domains": [
+        "jyt.shanxi.gov.cn",
+        "shanxi.gov.cn"
+      ],
+      "cities": [
+        "太原",
+        "大同",
+        "运城"
+      ]
+    },
+    {
+      "province": "内蒙古自治区",
+      "short": "内蒙古",
+      "domains": [
+        "jyt.nmg.gov.cn",
+        "nmg.gov.cn"
+      ],
+      "cities": [
+        "呼和浩特",
+        "包头",
+        "赤峰"
+      ]
+    },
+    {
+      "province": "辽宁省",
+      "short": "辽宁",
+      "domains": [
+        "jyt.ln.gov.cn",
+        "ln.gov.cn"
+      ],
+      "cities": [
+        "沈阳",
+        "大连",
+        "鞍山"
+      ]
+    },
+    {
+      "province": "吉林省",
+      "short": "吉林",
+      "domains": [
+        "jyt.jl.gov.cn",
+        "jl.gov.cn"
+      ],
+      "cities": [
+        "长春",
+        "吉林市",
+        "延边"
+      ]
+    },
+    {
+      "province": "黑龙江省",
+      "short": "黑龙江",
+      "domains": [
+        "jyt.hlj.gov.cn",
+        "hlj.gov.cn"
+      ],
+      "cities": [
+        "哈尔滨",
+        "齐齐哈尔",
+        "大庆"
+      ]
+    },
+    {
+      "province": "上海市",
+      "short": "上海",
+      "domains": [
+        "edu.sh.gov.cn",
+        "shanghai.gov.cn"
+      ],
+      "cities": [
+        "上海"
+      ]
+    },
+    {
+      "province": "江苏省",
+      "short": "江苏",
+      "domains": [
+        "jyt.jiangsu.gov.cn",
+        "jiangsu.gov.cn"
+      ],
+      "cities": [
+        "南京",
+        "苏州",
+        "无锡"
+      ]
+    },
+    {
+      "province": "浙江省",
+      "short": "浙江",
+      "domains": [
+        "jyt.zj.gov.cn",
+        "zj.gov.cn"
+      ],
+      "cities": [
+        "杭州",
+        "宁波",
+        "温州"
+      ]
+    },
+    {
+      "province": "安徽省",
+      "short": "安徽",
+      "domains": [
+        "jyt.ah.gov.cn",
+        "ah.gov.cn"
+      ],
+      "cities": [
+        "合肥",
+        "芜湖",
+        "阜阳"
+      ]
+    },
+    {
+      "province": "福建省",
+      "short": "福建",
+      "domains": [
+        "jyt.fujian.gov.cn",
+        "fujian.gov.cn"
+      ],
+      "cities": [
+        "福州",
+        "厦门",
+        "泉州"
+      ]
+    },
+    {
+      "province": "江西省",
+      "short": "江西",
+      "domains": [
+        "jyt.jiangxi.gov.cn",
+        "jiangxi.gov.cn"
+      ],
+      "cities": [
+        "南昌",
+        "赣州",
+        "九江"
+      ]
+    },
+    {
+      "province": "山东省",
+      "short": "山东",
+      "domains": [
+        "edu.shandong.gov.cn",
+        "shandong.gov.cn"
+      ],
+      "cities": [
+        "济南",
+        "青岛",
+        "潍坊"
+      ]
+    },
+    {
+      "province": "河南省",
+      "short": "河南",
+      "domains": [
+        "jyt.henan.gov.cn",
+        "henan.gov.cn"
+      ],
+      "cities": [
+        "郑州",
+        "洛阳",
+        "南阳"
+      ]
+    },
+    {
+      "province": "湖北省",
+      "short": "湖北",
+      "domains": [
+        "jyt.hubei.gov.cn",
+        "hubei.gov.cn"
+      ],
+      "cities": [
+        "武汉",
+        "宜昌",
+        "襄阳"
+      ]
+    },
+    {
+      "province": "湖南省",
+      "short": "湖南",
+      "domains": [
+        "jyt.hunan.gov.cn",
+        "hunan.gov.cn"
+      ],
+      "cities": [
+        "长沙",
+        "株洲",
+        "衡阳"
+      ]
+    },
+    {
+      "province": "广东省",
+      "short": "广东",
+      "domains": [
+        "edu.gd.gov.cn",
+        "gd.gov.cn"
+      ],
+      "cities": [
+        "广州",
+        "深圳",
+        "佛山"
+      ]
+    },
+    {
+      "province": "广西壮族自治区",
+      "short": "广西",
+      "domains": [
+        "jyt.gxzf.gov.cn",
+        "gxzf.gov.cn"
+      ],
+      "cities": [
+        "南宁",
+        "柳州",
+        "桂林"
+      ]
+    },
+    {
+      "province": "海南省",
+      "short": "海南",
+      "domains": [
+        "edu.hainan.gov.cn",
+        "hainan.gov.cn"
+      ],
+      "cities": [
+        "海口",
+        "三亚"
+      ]
+    },
+    {
+      "province": "重庆市",
+      "short": "重庆",
+      "domains": [
+        "jw.cq.gov.cn",
+        "cq.gov.cn"
+      ],
+      "cities": [
+        "重庆"
+      ]
+    },
+    {
+      "province": "四川省",
+      "short": "四川",
+      "domains": [
+        "edu.sc.gov.cn",
+        "sc.gov.cn"
+      ],
+      "cities": [
+        "成都",
+        "绵阳",
+        "德阳"
+      ]
+    },
+    {
+      "province": "贵州省",
+      "short": "贵州",
+      "domains": [
+        "jyt.guizhou.gov.cn",
+        "guizhou.gov.cn"
+      ],
+      "cities": [
+        "贵阳",
+        "遵义",
+        "毕节"
+      ]
+    },
+    {
+      "province": "云南省",
+      "short": "云南",
+      "domains": [
+        "jyt.yn.gov.cn",
+        "yn.gov.cn"
+      ],
+      "cities": [
+        "昆明",
+        "曲靖",
+        "大理"
+      ]
+    },
+    {
+      "province": "西藏自治区",
+      "short": "西藏",
+      "domains": [
+        "edu.xizang.gov.cn",
+        "xizang.gov.cn"
+      ],
+      "cities": [
+        "拉萨",
+        "日喀则"
+      ]
+    },
+    {
+      "province": "陕西省",
+      "short": "陕西",
+      "domains": [
+        "jyt.shaanxi.gov.cn",
+        "shaanxi.gov.cn"
+      ],
+      "cities": [
+        "西安",
+        "咸阳",
+        "宝鸡"
+      ]
+    },
+    {
+      "province": "甘肃省",
+      "short": "甘肃",
+      "domains": [
+        "jyt.gansu.gov.cn",
+        "gansu.gov.cn"
+      ],
+      "cities": [
+        "兰州",
+        "天水",
+        "酒泉"
+      ]
+    },
+    {
+      "province": "青海省",
+      "short": "青海",
+      "domains": [
+        "jyt.qinghai.gov.cn",
+        "qinghai.gov.cn"
+      ],
+      "cities": [
+        "西宁",
+        "海东"
+      ]
+    },
+    {
+      "province": "宁夏回族自治区",
+      "short": "宁夏",
+      "domains": [
+        "jyt.nx.gov.cn",
+        "nx.gov.cn"
+      ],
+      "cities": [
+        "银川",
+        "吴忠",
+        "石嘴山"
+      ]
+    },
+    {
+      "province": "新疆维吾尔自治区",
+      "short": "新疆",
+      "domains": [
+        "jyt.xinjiang.gov.cn",
+        "xinjiang.gov.cn"
+      ],
+      "cities": [
+        "乌鲁木齐",
+        "克拉玛依",
+        "喀什"
+      ]
+    }
   ]
 }

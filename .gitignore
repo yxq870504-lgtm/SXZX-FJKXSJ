@@ -7,3 +7,5 @@ start_dashboard_server.bat
 __pycache__/
 *.pyc
 .DS_Store
+scripts/official_calendar_cache/
+scripts/backups/
