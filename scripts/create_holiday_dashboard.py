@@ -165,7 +165,7 @@ function renderBars(id,event,colorClass=''){const rows=dist(event);document.getE
 let mapChart = null;
 let chinaMapReady = null;
 const NAME_ALIAS = {'北京':'北京市','天津':'天津市','上海':'上海市','重庆':'重庆市','河北':'河北省','山西':'山西省','辽宁':'辽宁省','吉林':'吉林省','黑龙江':'黑龙江省','江苏':'江苏省','浙江':'浙江省','安徽':'安徽省','福建':'福建省','江西':'江西省','山东':'山东省','河南':'河南省','湖北':'湖北省','湖南':'湖南省','广东':'广东省','海南':'海南省','四川':'四川省','贵州':'贵州省','云南':'云南省','陕西':'陕西省','甘肃':'甘肃省','青海':'青海省','台湾':'台湾省','内蒙古':'内蒙古自治区','广西':'广西壮族自治区','西藏':'西藏自治区','宁夏':'宁夏回族自治区','新疆':'新疆维吾尔自治区','香港':'香港特别行政区','澳门':'澳门特别行政区'};
-function provinceRows(){return DATA.records.map(r=>({name:NAME_ALIAS[r.short]||r.province,province:r.province,short:r.short,value:r.grades[grade].count,count:r.grades[grade].count,pct:r.grades[grade].pct,source:r.grades[grade].source})).sort((a,b)=>b.count-a.count||a.province.localeCompare(b.province,'zh-CN'))}
+function provinceRows(){const rows=DATA.records.map(r=>({name:NAME_ALIAS[r.short]||r.province,province:r.province,short:r.short,value:r.grades[grade].count,count:r.grades[grade].count,pct:r.grades[grade].pct,source:r.grades[grade].source})).sort((a,b)=>b.count-a.count||a.province.localeCompare(b.province,'zh-CN')); rows.forEach((x,i)=>{x.isTop=i<5; if(x.isTop)x.label={show:true,formatter:x.short,color:'#23699f',fontSize:12,fontWeight:900};}); return rows}
 async function ensureChinaMap(){
   if(chinaMapReady) return chinaMapReady;
   chinaMapReady = fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json').then(r=>r.json()).then(geo=>{geo.features=(geo.features||[]).filter(f=>!['南海诸岛','南海岛礁'].includes(f.properties&&f.properties.name)); echarts.registerMap('china', geo); return true;}).catch(()=>false);
@@ -180,9 +180,9 @@ async function renderMap(){
   if(!mapChart) mapChart = echarts.init(el);
   mapChart.setOption({
     backgroundColor:'transparent',
-    tooltip:{trigger:'item',backgroundColor:'#6a4ce6',borderColor:'#6a4ce6',borderWidth:0,textStyle:{color:'#fff',fontSize:15,fontWeight:800},formatter:p=>{const d=p.data||{};return `${d.short||p.name}<br/>在班人数 <b style="color:#ffe66d">${fmtNum(d.count||0)}</b><br/>在班占比 <b style="color:#ffe66d">${fmtPct(d.pct||0)}</b>`}},
+    tooltip:{trigger:'item',backgroundColor:'#ffffff',borderColor:'#dbeafe',borderWidth:1,extraCssText:'box-shadow:0 10px 28px rgba(49,91,228,.18);border-radius:12px;',textStyle:{color:'#24437a',fontSize:15,fontWeight:800},formatter:p=>{const d=p.data||{};return `${d.short||p.name}<br/>在班人数 <b style="color:#315be4">${fmtNum(d.count||0)}</b><br/>在班占比 <b style="color:#315be4">${fmtPct(d.pct||0)}</b>`}},
     visualMap:{show:false,min:0,max:max||1,inRange:{color:['#eef3f8','#a9d8f4','#2f86d7']}},
-    series:[{type:'map',map:'china',roam:false,zoom:1.06,top:0,bottom:0,left:0,right:0,layoutCenter:['50%','50%'],layoutSize:'108%',label:{show:true,color:'#24437a',fontSize:10,fontWeight:800},emphasis:{label:{color:'#315be4',fontWeight:900},itemStyle:{areaColor:'#eff6ff',borderColor:'#315be4',borderWidth:1.8}},itemStyle:{borderColor:'#d9dee8',borderWidth:1.25,areaColor:'#f1f4f8'},regions:[{name:'南海诸岛',itemStyle:{opacity:0,borderWidth:0},label:{show:false},emphasis:{disabled:true}}],data:rows}]
+    series:[{type:'map',map:'china',roam:false,zoom:1.02,top:0,bottom:0,left:0,right:0,layoutCenter:['50%','50%'],layoutSize:'103%',label:{show:false},emphasis:{label:{show:true,color:'#315be4',fontWeight:900,fontSize:12},itemStyle:{areaColor:'#eff6ff',borderColor:'#315be4',borderWidth:1.8}},itemStyle:{borderColor:'#d9dee8',borderWidth:1.25,areaColor:'#f1f4f8'},regions:[{name:'南海诸岛',itemStyle:{opacity:0,borderWidth:0},label:{show:false},emphasis:{disabled:true}}],data:rows}]
   }, true);
   setTimeout(()=>mapChart && mapChart.resize(), 0);
 }
