@@ -168,7 +168,7 @@ const NAME_ALIAS = {'北京':'北京市','天津':'天津市','上海':'上海�
 function provinceRows(){const rows=DATA.records.map(r=>({name:NAME_ALIAS[r.short]||r.province,province:r.province,short:r.short,value:r.grades[grade].count,count:r.grades[grade].count,pct:r.grades[grade].pct,source:r.grades[grade].source})).sort((a,b)=>b.count-a.count||a.province.localeCompare(b.province,'zh-CN')); rows.forEach((x,i)=>{x.isTop=i<5; if(x.isTop)x.label={show:true,formatter:x.short,color:'#23699f',fontSize:12,fontWeight:900};}); return rows}
 async function ensureChinaMap(){
   if(chinaMapReady) return chinaMapReady;
-  chinaMapReady = fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json').then(r=>r.json()).then(geo=>{geo.features=(geo.features||[]).filter(f=>{const n=(f.properties&&f.properties.name)||''; const code=f.properties&&f.properties.adcode; return n && !['南海诸岛','南海岛礁','台湾省','香港特别行政区','澳门特别行政区'].includes(n) && code !== '100000_JD';}); echarts.registerMap('china', geo); return true;}).catch(()=>false);
+  chinaMapReady = fetch('data/china-mainland-trimmed.json?v=mainland').then(r=>r.json()).then(geo=>{echarts.registerMap('china', geo); return true;}).catch(()=>false);
   return chinaMapReady;
 }
 async function renderMap(){
