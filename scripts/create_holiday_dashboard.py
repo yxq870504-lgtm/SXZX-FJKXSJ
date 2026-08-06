@@ -182,7 +182,7 @@ async function renderMap(){
     backgroundColor:'transparent',
     tooltip:{trigger:'item',backgroundColor:'#6a4ce6',borderColor:'#6a4ce6',borderWidth:0,textStyle:{color:'#fff',fontSize:15,fontWeight:800},formatter:p=>{const d=p.data||{};return `${d.short||p.name}<br/>在班人数 <b style="color:#ffe66d">${fmtNum(d.count||0)}</b><br/>在班占比 <b style="color:#ffe66d">${fmtPct(d.pct||0)}</b>`}},
     visualMap:{show:false,min:0,max:max||1,inRange:{color:['#dbeafe','#93c5fd','#315be4']}},
-    series:[{type:'map',map:'china',roam:false,zoom:1.28,top:0,bottom:0,left:'center',layoutCenter:['50%','52%'],layoutSize:'132%',label:{show:true,color:'#24437a',fontSize:10,fontWeight:800},emphasis:{label:{color:'#315be4',fontWeight:900},itemStyle:{areaColor:'#eff6ff',borderColor:'#315be4',borderWidth:1.8}},itemStyle:{borderColor:'#b7c9f7',borderWidth:1.1,areaColor:'#dbeafe'},regions:[{name:'南海诸岛',itemStyle:{opacity:0,borderWidth:0},label:{show:false},emphasis:{disabled:true}}],data:rows}]
+    series:[{type:'map',map:'china',roam:false,zoom:1.18,top:4,bottom:0,left:'center',layoutCenter:['50%','56%'],layoutSize:'120%',label:{show:true,color:'#24437a',fontSize:10,fontWeight:800},emphasis:{label:{color:'#315be4',fontWeight:900},itemStyle:{areaColor:'#eff6ff',borderColor:'#315be4',borderWidth:1.8}},itemStyle:{borderColor:'#b7c9f7',borderWidth:1.1,areaColor:'#dbeafe'},regions:[{name:'南海诸岛',itemStyle:{opacity:0,borderWidth:0},label:{show:false},emphasis:{disabled:true}}],data:rows}]
   }, true);
   setTimeout(()=>mapChart && mapChart.resize(), 0);
 }
